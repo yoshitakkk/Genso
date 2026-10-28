@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f5f7f4" />
+    <meta name="theme-color" content="#101820" />
     <meta
       name="description"
       content="元素記号をカードとクイズで楽しく覚える、スマートフォン向けの学習アプリです。"
     />
-    <title>GENSO — 元素を、もっと身近に。</title>
+    <title>GENSO — 元素記号を学ぶ</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="app.js" defer></script>
   </head>
@@ -19,15 +19,15 @@
           <span class="brand-mark" aria-hidden="true">G</span>
           <span>GENSO<span class="brand-period">.</span></span>
         </a>
-        <div class="topbar-note"><span class="status-dot"></span> すきま時間に、ひとつずつ。</div>
+        <div class="topbar-note"><span class="status-dot"></span> 元素記号 学習ツール</div>
       </header>
 
       <main>
         <section class="welcome" aria-labelledby="welcome-title">
           <div class="welcome-copy">
-            <p class="eyebrow"><span class="eyebrow-line"></span> YOUR ELEMENTAL JOURNEY</p>
-            <h1 id="welcome-title">元素記号を、<br class="mobile-break" />自分のものに。</h1>
-            <p class="welcome-description">カードをめくって、クイズに挑戦。<br class="mobile-break" />118の元素を楽しく覚えよう。</p>
+            <p class="eyebrow"><span class="eyebrow-line"></span> ELEMENT LEARNING</p>
+            <h1 id="welcome-title">元素記号を学ぶ</h1>
+            <p class="welcome-description">レベルを選んで、クイズやカードで学習できます。</p>
           </div>
           <div class="welcome-decoration" aria-hidden="true">
             <div class="orbit orbit-one"></div>
@@ -36,6 +36,24 @@
             <span class="orbit-dot dot-one"></span>
             <span class="orbit-dot dot-two"></span>
             <span class="orbit-dot dot-three"></span>
+          </div>
+        </section>
+
+        <section class="level-picker" aria-labelledby="level-heading">
+          <div class="level-heading">
+            <p class="eyebrow">CHOOSE YOUR LEVEL</p>
+            <h2 id="level-heading">学習レベル</h2>
+          </div>
+          <div class="level-options" role="group" aria-label="学習レベル">
+            <button class="level-button is-active" type="button" data-level="basic" aria-pressed="true">
+              <span class="level-name">基礎</span><span class="level-description">中学で習う元素</span>
+            </button>
+            <button class="level-button" type="button" data-level="intermediate" aria-pressed="false">
+              <span class="level-name">中級</span><span class="level-description">日常で目にする元素</span>
+            </button>
+            <button class="level-button" type="button" data-level="advanced" aria-pressed="false">
+              <span class="level-name">上級</span><span class="level-description">発展・希少な元素</span>
+            </button>
           </div>
         </section>
 
@@ -58,6 +76,7 @@
           <button class="tab-button is-active" type="button" data-view="quiz" aria-selected="true"><span aria-hidden="true">◉</span> クイズ</button>
           <button class="tab-button" type="button" data-view="cards" aria-selected="false"><span aria-hidden="true">▤</span> カード</button>
           <button class="tab-button" type="button" data-view="elements" aria-selected="false"><span aria-hidden="true">▦</span> 元素一覧</button>
+          <button class="tab-button" type="button" data-view="table" aria-selected="false"><span aria-hidden="true">▦</span> 周期表</button>
         </nav>
 
         <section class="view-panel" id="quiz-view" aria-labelledby="quiz-heading">
@@ -75,6 +94,7 @@
             <div class="quiz-symbol" id="quiz-symbol">H</div>
             <div class="quiz-choices" id="quiz-choices" role="group" aria-label="答えを選択"></div>
             <div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div>
+            <div class="quiz-feature" id="quiz-feature" hidden></div>
             <button class="primary-button next-question" id="next-question" type="button" hidden>次の問題 <span aria-hidden="true">→</span></button>
           </div>
           <p class="helper-text"><span aria-hidden="true">✦</span> 10問チャレンジ。何度でも挑戦できます。</p>
@@ -89,7 +109,7 @@
             <div class="question-counter" id="card-counter">1 <span>/ 118</span></div>
           </div>
           <div class="flashcard" id="flashcard" aria-live="polite">
-            <div class="flashcard-kicker">ELEMENT <span id="card-number">01</span></div>
+            <div class="flashcard-kicker"><span id="card-level">ELEMENT</span><span id="card-number">01</span></div>
             <div class="flashcard-symbol" id="card-symbol">H</div>
             <div class="flashcard-name" id="card-name" hidden>水素</div>
             <p class="flashcard-hint" id="card-hint">タップして答えを確認</p>
@@ -119,9 +139,47 @@
           <div class="element-grid" id="element-grid" aria-live="polite"></div>
           <p class="empty-state" id="empty-state" hidden>見つかりませんでした。別の言葉で検索してみてください。</p>
         </section>
+
+        <section class="view-panel" id="table-view" aria-labelledby="table-heading" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">PERIODIC TABLE</p>
+              <h2 id="table-heading">元素周期表</h2>
+            </div>
+            <div class="question-counter">1–18 <span>族</span></div>
+          </div>
+          <div class="table-legend" aria-label="元素の分類">
+            <span><i class="legend-swatch family-alkali"></i>アルカリ金属</span>
+            <span><i class="legend-swatch family-alkaline"></i>アルカリ土類</span>
+            <span><i class="legend-swatch family-transition"></i>遷移金属</span>
+            <span><i class="legend-swatch family-post-transition"></i>その他の金属</span>
+            <span><i class="legend-swatch family-metalloid"></i>半金属</span>
+            <span><i class="legend-swatch family-nonmetal"></i>非金属</span>
+            <span><i class="legend-swatch family-halogen"></i>ハロゲン</span>
+            <span><i class="legend-swatch family-noble"></i>希ガス</span>
+            <span><i class="legend-swatch family-lanthanide"></i>ランタノイド</span>
+            <span><i class="legend-swatch family-actinide"></i>アクチノイド</span>
+          </div>
+          <div class="periodic-detail" id="periodic-detail" aria-live="polite">
+            <span class="detail-symbol">—</span>
+            <span class="detail-copy">元素を選ぶと、英語名・族・周期を表示します。</span>
+          </div>
+          <p class="table-hint">元素をタップして詳細を表示。スマートフォンでは左右にスクロールできます。</p>
+          <div class="periodic-scroll" tabindex="0" aria-label="周期表。左右にスクロールできます">
+            <div class="periodic-table" id="periodic-table"></div>
+          </div>
+          <div class="series-label">ランタノイド（57–71）</div>
+          <div class="periodic-scroll series-scroll" tabindex="0" aria-label="ランタノイド系列">
+            <div class="series-table" id="lanthanide-series"></div>
+          </div>
+          <div class="series-label">アクチノイド（89–103）</div>
+          <div class="periodic-scroll series-scroll" tabindex="0" aria-label="アクチノイド系列">
+            <div class="series-table" id="actinide-series"></div>
+          </div>
+        </section>
       </main>
 
-      <footer class="footer"><span>MADE FOR CURIOUS MINDS</span><span>元素は、世界のことば。</span></footer>
+      <footer class="footer"><span>GENSO · ELEMENT LEARNING</span><span>全118元素を収録</span></footer>
     </div>
   </body>
 </html>
