@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f7f4" />
+    <meta
+      name="description"
+      content="元素記号をカードとクイズで楽しく覚える、スマートフォン向けの学習アプリです。"
+    />
+    <title>GENSO — 元素を、もっと身近に。</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="GENSO ホーム">
+          <span class="brand-mark" aria-hidden="true">G</span>
+          <span>GENSO<span class="brand-period">.</span></span>
+        </a>
+        <div class="topbar-note"><span class="status-dot"></span> すきま時間に、ひとつずつ。</div>
+      </header>
+
+      <main>
+        <section class="welcome" aria-labelledby="welcome-title">
+          <div class="welcome-copy">
+            <p class="eyebrow"><span class="eyebrow-line"></span> YOUR ELEMENTAL JOURNEY</p>
+            <h1 id="welcome-title">元素記号を、<br class="mobile-break" />自分のものに。</h1>
+            <p class="welcome-description">カードをめくって、クイズに挑戦。<br class="mobile-break" />118の元素を楽しく覚えよう。</p>
+          </div>
+          <div class="welcome-decoration" aria-hidden="true">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="orbit-core">Ne</div>
+            <span class="orbit-dot dot-one"></span>
+            <span class="orbit-dot dot-two"></span>
+            <span class="orbit-dot dot-three"></span>
+          </div>
+        </section>
+
+        <section class="stats" aria-label="学習状況">
+          <article class="stat-card">
+            <span class="stat-icon stat-icon-green" aria-hidden="true">✦</span>
+            <div><p class="stat-label">おぼえた元素</p><p class="stat-value"><span id="learned-count">0</span><span class="stat-unit"> / 118</span></p></div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon stat-icon-yellow" aria-hidden="true">◎</span>
+            <div><p class="stat-label">クイズ正解</p><p class="stat-value"><span id="correct-count">0</span><span class="stat-unit"> 問</span></p></div>
+          </article>
+          <article class="stat-card stat-card-total">
+            <span class="stat-icon stat-icon-blue" aria-hidden="true">▦</span>
+            <div><p class="stat-label">元素の数</p><p class="stat-value">118<span class="stat-unit"> 種類</span></p></div>
+          </article>
+        </section>
+
+        <nav class="tabs" aria-label="学習メニュー">
+          <button class="tab-button is-active" type="button" data-view="quiz" aria-selected="true"><span aria-hidden="true">◉</span> クイズ</button>
+          <button class="tab-button" type="button" data-view="cards" aria-selected="false"><span aria-hidden="true">▤</span> カード</button>
+          <button class="tab-button" type="button" data-view="elements" aria-selected="false"><span aria-hidden="true">▦</span> 元素一覧</button>
+        </nav>
+
+        <section class="view-panel" id="quiz-view" aria-labelledby="quiz-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">QUICK QUIZ</p>
+              <h2 id="quiz-heading">クイズに挑戦</h2>
+            </div>
+            <div class="question-counter" id="question-counter" aria-live="polite">1 <span>/ 10</span></div>
+          </div>
+          <div class="quiz-progress" aria-hidden="true"><span id="quiz-progress-bar"></span></div>
+          <div class="quiz-card" id="quiz-card">
+            <div class="quiz-card-top"><span class="quiz-mode">元素記号から選ぼう</span><span class="atomic-number" id="quiz-atomic-number">No. 01</span></div>
+            <div class="quiz-prompt">この元素の名前は？</div>
+            <div class="quiz-symbol" id="quiz-symbol">H</div>
+            <div class="quiz-choices" id="quiz-choices" role="group" aria-label="答えを選択"></div>
+            <div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div>
+            <button class="primary-button next-question" id="next-question" type="button" hidden>次の問題 <span aria-hidden="true">→</span></button>
+          </div>
+          <p class="helper-text"><span aria-hidden="true">✦</span> 10問チャレンジ。何度でも挑戦できます。</p>
+        </section>
+
+        <section class="view-panel" id="cards-view" aria-labelledby="cards-heading" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">FLASH CARDS</p>
+              <h2 id="cards-heading">カードで覚える</h2>
+            </div>
+            <div class="question-counter" id="card-counter">1 <span>/ 118</span></div>
+          </div>
+          <div class="flashcard" id="flashcard" aria-live="polite">
+            <div class="flashcard-kicker">ELEMENT <span id="card-number">01</span></div>
+            <div class="flashcard-symbol" id="card-symbol">H</div>
+            <div class="flashcard-name" id="card-name" hidden>水素</div>
+            <p class="flashcard-hint" id="card-hint">タップして答えを確認</p>
+            <button class="card-flip" id="flip-card" type="button">答えを見る <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="card-controls">
+            <button class="secondary-button" id="previous-card" type="button" aria-label="前の元素">← <span>前へ</span></button>
+            <button class="learned-button" id="toggle-learned" type="button">☆ おぼえた</button>
+            <button class="secondary-button" id="next-card" type="button"><span>次へ</span> →</button>
+          </div>
+          <p class="helper-text"><span aria-hidden="true">✦</span> 覚えた元素には「おぼえた」マークをつけよう。</p>
+        </section>
+
+        <section class="view-panel" id="elements-view" aria-labelledby="elements-heading" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">PERIODIC COLLECTION</p>
+              <h2 id="elements-heading">元素一覧</h2>
+            </div>
+            <div class="question-counter"><span id="element-count">118</span> <span>元素</span></div>
+          </div>
+          <label class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="element-search" type="search" placeholder="名前・記号・番号で検索" autocomplete="off" />
+            <kbd>/</kbd>
+          </label>
+          <div class="element-grid" id="element-grid" aria-live="polite"></div>
+          <p class="empty-state" id="empty-state" hidden>見つかりませんでした。別の言葉で検索してみてください。</p>
+        </section>
+      </main>
+
+      <footer class="footer"><span>MADE FOR CURIOUS MINDS</span><span>元素は、世界のことば。</span></footer>
+    </div>
+  </body>
+</html>
