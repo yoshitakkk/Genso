@@ -241,6 +241,7 @@ elements.forEach((element) => {
 });
 
 const storageKey = "genso-learning-progress";
+const elementReferenceUrl = "https://www.mext.go.jp/stw/common/pdf/series/element/element_b13s.pdf";
 const saved = readProgress();
 const state = {
   learned: new Set(saved.learned),
@@ -442,29 +443,6 @@ function flipCard() {
     : '答えを見る <span aria-hidden="true">↗</span>';
 }
 
-function renderElements(filter = "") {
-  const query = filter.trim().toLocaleLowerCase();
-  const matched = getLevelElements().filter((element) => (
-    element.name.toLocaleLowerCase().includes(query)
-    || element.englishName.toLocaleLowerCase().includes(query)
-    || element.symbol.toLocaleLowerCase().includes(query)
-    || String(element.number).includes(query)
-  ));
-  $("#element-count").textContent = matched.length;
-  $("#empty-state").hidden = matched.length > 0;
-  const grid = $("#element-grid");
-  grid.replaceChildren();
-  matched.forEach((element) => {
-    const tile = document.createElement("article");
-    tile.className = `element-tile family-${element.family}${state.learned.has(element.number) ? " is-learned" : ""}`;
-    tile.setAttribute("aria-label", `${element.number}番 ${element.name} ${element.englishName} ${element.symbol} ${element.group}族`);
-    tile.innerHTML = `<span class="tile-number">${element.number}</span><span class="tile-symbol"></span><span class="tile-name"></span>`;
-    tile.querySelector(".tile-symbol").textContent = element.symbol;
-    tile.querySelector(".tile-name").textContent = element.name;
-    grid.append(tile);
-  });
-}
-
 function formatGroup(element) {
   if (lanthanideNumbers.has(element.number)) return "ランタノイド（3族相当）";
   if (actinideNumbers.has(element.number)) return "アクチノイド（3族相当）";
@@ -483,13 +461,24 @@ function renderAnswerDetails(element) {
   const description = document.createElement("p");
   description.className = "feature-description";
   description.textContent = `元素メモ：${element.feature}`;
+  const sourceLink = createElementSourceLink();
   const tableButton = document.createElement("button");
   tableButton.className = "feature-table-button";
   tableButton.type = "button";
   tableButton.textContent = "周期表で位置を見る →";
   tableButton.addEventListener("click", () => showView("table"));
-  details.append(heading, meta, description, tableButton);
+  details.append(heading, meta, description, sourceLink, tableButton);
   details.hidden = false;
+}
+
+function createElementSourceLink() {
+  const link = document.createElement("a");
+  link.className = "element-source";
+  link.href = elementReferenceUrl;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = "文部科学省「元素周期表」の解説を見る ↗";
+  return link;
 }
 
 function renderPeriodicDetail(element) {
@@ -511,7 +500,10 @@ function renderPeriodicDetail(element) {
   name.textContent = `${element.name} · ${element.englishName}`;
   const position = document.createElement("span");
   position.textContent = `原子番号 ${element.number}　${formatGroup(element)}　${element.period}周期`;
-  copy.append(name, position);
+  const description = document.createElement("span");
+  description.className = "detail-description";
+  description.textContent = element.feature;
+  copy.append(name, position, description, createElementSourceLink());
   detail.append(symbol, copy);
 }
 
@@ -608,7 +600,6 @@ document.querySelectorAll(".level-button").forEach((button) => {
     if (!$("#quiz-choices")) renderQuizCard();
     startQuiz();
     renderCard();
-    renderElements($("#element-search").value);
   });
 });
 $("#quiz-card").addEventListener("click", (event) => {
@@ -636,19 +627,9 @@ $("#toggle-learned").addEventListener("click", () => {
   saveProgress();
   updateStats();
   renderCard();
-  renderElements($("#element-search").value);
-});
-$("#element-search").addEventListener("input", (event) => renderElements(event.target.value));
-document.addEventListener("keydown", (event) => {
-  if (event.key === "/" && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) {
-    event.preventDefault();
-    showView("elements");
-    $("#element-search").focus();
-  }
 });
 
 updateStats();
 startQuiz();
 renderCard();
-renderElements();
 renderPeriodicTable();

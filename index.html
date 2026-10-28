@@ -75,7 +75,6 @@
         <nav class="tabs" aria-label="学習メニュー">
           <button class="tab-button is-active" type="button" data-view="quiz" aria-selected="true"><span aria-hidden="true">◉</span> クイズ</button>
           <button class="tab-button" type="button" data-view="cards" aria-selected="false"><span aria-hidden="true">▤</span> カード</button>
-          <button class="tab-button" type="button" data-view="elements" aria-selected="false"><span aria-hidden="true">▦</span> 元素一覧</button>
           <button class="tab-button" type="button" data-view="table" aria-selected="false"><span aria-hidden="true">▦</span> 周期表</button>
         </nav>
 
@@ -121,23 +120,6 @@
             <button class="secondary-button" id="next-card" type="button"><span>次へ</span> →</button>
           </div>
           <p class="helper-text"><span aria-hidden="true">✦</span> 覚えた元素には「おぼえた」マークをつけよう。</p>
-        </section>
-
-        <section class="view-panel" id="elements-view" aria-labelledby="elements-heading" hidden>
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">PERIODIC COLLECTION</p>
-              <h2 id="elements-heading">元素一覧</h2>
-            </div>
-            <div class="question-counter"><span id="element-count">118</span> <span>元素</span></div>
-          </div>
-          <label class="search-box">
-            <span aria-hidden="true">⌕</span>
-            <input id="element-search" type="search" placeholder="名前・記号・番号で検索" autocomplete="off" />
-            <kbd>/</kbd>
-          </label>
-          <div class="element-grid" id="element-grid" aria-live="polite"></div>
-          <p class="empty-state" id="empty-state" hidden>見つかりませんでした。別の言葉で検索してみてください。</p>
         </section>
 
         <section class="view-panel" id="table-view" aria-labelledby="table-heading" hidden>
