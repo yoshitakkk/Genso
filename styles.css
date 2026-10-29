@@ -508,3 +508,439 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline-color: #8b8
 @media (max-width: 700px) {
   .level-picker { border-color: #334159; background: #1a2539; }
 }
+
+:root {
+  color-scheme: dark;
+  color: #e8edf5;
+  background: #111827;
+  --ink: #e8edf5;
+  --muted: #a4afc0;
+  --line: #334155;
+}
+
+body {
+  background: #111827;
+}
+
+button:focus-visible, a:focus-visible, input:focus-visible {
+  outline-color: #8988d8;
+}
+
+.app-shell {
+  width: min(100% - 48px, 960px);
+}
+
+.topbar {
+  height: 68px;
+  border-color: #293548;
+}
+
+.brand {
+  color: #eef2f8;
+  font-size: 16px;
+  letter-spacing: .04em;
+}
+
+.welcome {
+  min-height: 100px;
+  justify-content: center;
+  margin: 20px 0 16px;
+  padding: 18px 12px;
+  border-radius: 0;
+  background: transparent;
+  text-align: center;
+}
+
+.welcome h1 {
+  color: #eef2f8;
+  font-size: clamp(28px, 4vw, 36px);
+  letter-spacing: .02em;
+}
+
+.dashboard-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 24px;
+  padding: 20px 22px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #1c2738;
+}
+
+.level-picker {
+  min-width: 0;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.level-heading {
+  margin-bottom: 10px;
+}
+
+.level-heading h2 {
+  color: #aeb9ca;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.level-options {
+  gap: 8px;
+}
+
+.level-button {
+  min-height: 43px;
+  align-items: center;
+  padding: 8px 12px;
+  border-color: #39475c;
+  border-radius: 9px;
+  background: #1c2738;
+  text-align: center;
+}
+
+.level-button:hover {
+  border-color: #68728c;
+  background: #222f43;
+}
+
+.level-button.is-active {
+  border-color: #7777cc;
+  background: #30345f;
+  box-shadow: none;
+}
+
+.level-button.is-active .level-name {
+  color: #f0efff;
+}
+
+.level-name {
+  font-size: 13px;
+}
+
+.stats {
+  display: block;
+  margin: 0;
+  padding-left: 22px;
+  border-left: 1px solid #39475c;
+}
+
+.stat-card {
+  min-height: 0;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.stat-label {
+  margin-bottom: 4px;
+  color: #aeb9ca;
+  font-size: 11px;
+}
+
+.stat-value {
+  color: #f0f2f8;
+  font-size: 22px;
+}
+
+.stat-unit {
+  color: #aeb9ca;
+  font-size: 11px;
+}
+
+.tabs {
+  gap: 10px;
+  border-color: #334155;
+}
+
+.tab-button {
+  border-radius: 8px 8px 0 0;
+  color: #aeb9ca;
+}
+
+.tab-button:hover {
+  background: #202c40;
+  color: #e4e9f2;
+}
+
+.tab-button.is-active {
+  color: #dedcff;
+  background: #2a2e50;
+}
+
+.tab-button.is-active::after {
+  background: #7777cc;
+}
+
+.section-heading h2 {
+  color: #eef2f8;
+}
+
+.eyebrow {
+  color: #aeb9ca;
+}
+
+.question-counter {
+  color: #c3c4f1;
+}
+
+.question-counter span,
+.atomic-number {
+  color: #aeb9ca;
+}
+
+.quiz-progress {
+  background: #2b374b;
+}
+
+.quiz-progress span {
+  background: #7777cc;
+}
+
+.quiz-card {
+  border-color: #334155;
+  background: #1c2738;
+  box-shadow: none;
+}
+
+.quiz-mode,
+.quiz-prompt {
+  color: #b6c1d0;
+}
+
+.quiz-symbol {
+  color: #d3d5f4;
+}
+
+.choice-button {
+  border-color: #39475c;
+  background: #202c40;
+  color: #e8edf5;
+}
+
+.choice-button:hover:not(:disabled) {
+  border-color: #7777cc;
+  background: #29344a;
+}
+
+.choice-button.is-correct {
+  border-color: #628a78;
+  background: #233b36;
+  color: #c1e2d0;
+}
+
+.choice-button.is-wrong {
+  border-color: #9c6269;
+  background: #3a2935;
+  color: #f0c3c8;
+}
+
+.quiz-feedback {
+  color: #b6dbc4;
+}
+
+.quiz-feedback.is-wrong {
+  color: #edb4b8;
+}
+
+.quiz-feature {
+  border-color: #39475c;
+  background: #202c40;
+  color: #d5dce8;
+}
+
+.feature-heading,
+.quiz-result h3 {
+  color: #eef2f8;
+}
+
+.feature-meta,
+.element-source {
+  color: #c3c4f1;
+}
+
+.feature-description,
+.quiz-result p {
+  color: #c0cad8;
+}
+
+.feature-table-button {
+  border-color: #535b8b;
+  background: #2a2e50;
+  color: #dedcff;
+}
+
+.primary-button {
+  background: #5759aa;
+  color: #fff;
+}
+
+.primary-button:hover {
+  background: #6567b9;
+}
+
+.helper-text {
+  color: #aeb9ca;
+}
+
+.quiz-result-score {
+  color: #c3c4f1;
+}
+
+.footer {
+  border-color: #293548;
+  color: #aeb9ca;
+}
+
+.periodic-detail,
+.table-legend {
+  border-color: #334155;
+  background: #1c2738;
+}
+
+.periodic-cell.is-highlighted {
+  border-color: #d5d3ff;
+  background: #34365e;
+  color: #f0efff;
+  box-shadow: 0 0 0 1px rgba(213, 211, 255, .16);
+}
+
+.family-alkali { --family-color: #d2a39b; --family-bg: #3b3035; }
+.family-alkaline { --family-color: #d2bd91; --family-bg: #3b362c; }
+.family-transition { --family-color: #a4bbd6; --family-bg: #293648; }
+.family-post-transition { --family-color: #96c3b9; --family-bg: #293b3b; }
+.family-metalloid { --family-color: #bca8cc; --family-bg: #362f3e; }
+.family-nonmetal { --family-color: #b4c99f; --family-bg: #303b30; }
+.family-halogen { --family-color: #d0a2b3; --family-bg: #3c3039; }
+.family-noble { --family-color: #9dc0cb; --family-bg: #2b3b42; }
+.family-lanthanide { --family-color: #b0a9c8; --family-bg: #343241; }
+.family-actinide { --family-color: #cda88f; --family-bg: #3d342f; }
+
+.answer-periodic {
+  margin-top: 12px;
+}
+
+.answer-periodic-heading {
+  margin: 0 0 7px;
+  color: #d4d8eb;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.answer-periodic-scroll {
+  overflow-x: auto;
+  padding: 2px 0 4px;
+}
+
+.answer-periodic-table {
+  width: max-content;
+  margin: 0 auto;
+}
+
+.answer-periodic-table .period-grid {
+  grid-template-columns: 12px repeat(18, 13px);
+  grid-template-rows: repeat(7, 20px);
+  gap: 2px;
+}
+
+.answer-periodic-table .period-label {
+  color: #aeb9ca;
+  font-size: 7px;
+}
+
+.answer-periodic-table .periodic-cell {
+  width: 13px;
+  min-width: 13px;
+  height: 20px;
+  padding: 0;
+  border-radius: 3px;
+  cursor: default;
+}
+
+.answer-periodic-table .periodic-cell:hover {
+  transform: none;
+  filter: none;
+}
+
+.answer-periodic-table .periodic-number,
+.answer-periodic-table .periodic-name {
+  display: none;
+}
+
+.answer-periodic-table .periodic-symbol {
+  font-size: 7px;
+}
+
+.answer-periodic-table .periodic-cell.is-highlighted {
+  border: 1px solid #e1dcff;
+  background: #53538a;
+  box-shadow: 0 0 0 1px rgba(225, 220, 255, .25);
+}
+
+.answer-periodic-table .series-placeholder {
+  font-size: 6px;
+}
+
+.answer-periodic-series {
+  margin-top: 4px;
+}
+
+.answer-series-label {
+  display: block;
+  margin: 0 0 2px 14px;
+  color: #aeb9ca;
+  font-size: 7px;
+}
+
+.answer-periodic-table .series-grid {
+  grid-template-columns: repeat(18, 13px);
+  grid-template-rows: 20px;
+  gap: 2px;
+}
+
+@media (max-width: 700px) {
+  .app-shell {
+    width: calc(100% - 32px);
+  }
+
+  .welcome {
+    min-height: 88px;
+    margin: 14px 0 10px;
+  }
+
+  .dashboard-card {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 16px;
+  }
+
+  .level-heading {
+    display: block;
+    margin-bottom: 9px;
+  }
+
+  .level-options {
+    gap: 6px;
+  }
+
+  .level-button {
+    min-height: 43px;
+    padding: 7px;
+  }
+
+  .level-name {
+    font-size: 12px;
+  }
+
+  .stats {
+    padding: 12px 0 0;
+    border-top: 1px solid #39475c;
+    border-left: 0;
+  }
+}

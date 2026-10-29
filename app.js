@@ -244,12 +244,9 @@ const storageKey = "genso-learning-progress";
 const elementReferenceUrl = "https://www.mext.go.jp/stw/common/pdf/series/element/element_b13s.pdf";
 const saved = readProgress();
 const state = {
-  learned: new Set(saved.learned),
   correct: saved.correct,
   activeView: "quiz",
   level: "basic",
-  cardIndex: 0,
-  revealed: false,
   quizQuestions: [],
   quizIndex: 0,
   quizScore: 0,
@@ -258,35 +255,27 @@ const state = {
 };
 
 const $ = (selector) => document.querySelector(selector);
-const learnedCount = $("#learned-count");
 const correctCount = $("#correct-count");
 
 function readProgress() {
   try {
     const data = JSON.parse(localStorage.getItem(storageKey) || "{}");
-    const learned = Array.isArray(data.learned)
-      ? data.learned.filter((number) => Number.isInteger(number) && number >= 1 && number <= 118)
-      : [];
-    return { learned, correct: Number.isInteger(data.correct) && data.correct >= 0 ? data.correct : 0 };
+    return { correct: Number.isInteger(data.correct) && data.correct >= 0 ? data.correct : 0 };
   } catch (error) {
     console.warn("学習状況を読み込めませんでした。", error);
-    return { learned: [], correct: 0 };
+    return { correct: 0 };
   }
 }
 
 function saveProgress() {
   try {
-    localStorage.setItem(storageKey, JSON.stringify({
-      learned: [...state.learned],
-      correct: state.correct,
-    }));
+    localStorage.setItem(storageKey, JSON.stringify({ correct: state.correct }));
   } catch (error) {
     console.warn("学習状況を保存できませんでした。", error);
   }
 }
 
 function updateStats() {
-  learnedCount.textContent = state.learned.size;
   correctCount.textContent = state.correct;
 }
 
@@ -416,33 +405,6 @@ function renderQuizCard() {
     <button class="primary-button next-question" id="next-question" type="button" hidden>次の問題 <span aria-hidden="true">→</span></button>`;
 }
 
-function renderCard() {
-  const levelElements = getLevelElements();
-  const element = levelElements[state.cardIndex];
-  state.revealed = false;
-  $("#card-counter").innerHTML = `${state.cardIndex + 1} <span>/ ${levelElements.length}</span>`;
-  $("#card-level").textContent = `${getLevelName().toUpperCase()} · ELEMENT`;
-  $("#flashcard").className = `flashcard family-${element.family}`;
-  $("#card-number").textContent = String(element.number).padStart(2, "0");
-  $("#card-symbol").textContent = element.symbol;
-  $("#card-name").textContent = element.name;
-  $("#card-name").hidden = true;
-  $("#card-hint").textContent = "タップして答えを確認";
-  $("#flip-card").innerHTML = '答えを見る <span aria-hidden="true">↗</span>';
-  $("#toggle-learned").classList.toggle("is-learned", state.learned.has(element.number));
-  $("#toggle-learned").textContent = state.learned.has(element.number) ? "★ おぼえた！" : "☆ おぼえた";
-  $("#previous-card").disabled = state.cardIndex === 0;
-}
-
-function flipCard() {
-  state.revealed = !state.revealed;
-  $("#card-name").hidden = !state.revealed;
-  $("#card-hint").textContent = state.revealed ? "元素記号と名前をセットで覚えよう" : "タップして答えを確認";
-  $("#flip-card").innerHTML = state.revealed
-    ? '記号を確認 <span aria-hidden="true">↗</span>'
-    : '答えを見る <span aria-hidden="true">↗</span>';
-}
-
 function formatGroup(element) {
   if (lanthanideNumbers.has(element.number)) return "ランタノイド（3族相当）";
   if (actinideNumbers.has(element.number)) return "アクチノイド（3族相当）";
@@ -461,14 +423,80 @@ function renderAnswerDetails(element) {
   const description = document.createElement("p");
   description.className = "feature-description";
   description.textContent = `元素メモ：${element.feature}`;
-  const sourceLink = createElementSourceLink();
-  const tableButton = document.createElement("button");
-  tableButton.className = "feature-table-button";
-  tableButton.type = "button";
-  tableButton.textContent = "周期表で位置を見る →";
-  tableButton.addEventListener("click", () => showView("table"));
-  details.append(heading, meta, description, sourceLink, tableButton);
+  details.append(heading, meta, description, createAnswerPeriodicTable(element));
   details.hidden = false;
+}
+
+function createAnswerPeriodicTable(selectedElement) {
+  const section = document.createElement("section");
+  section.className = "answer-periodic";
+  section.setAttribute("aria-label", "回答した元素の周期表上の位置");
+  const heading = document.createElement("h3");
+  heading.className = "answer-periodic-heading";
+  heading.textContent = "周期表の位置";
+  const scroll = document.createElement("div");
+  scroll.className = "answer-periodic-scroll";
+  scroll.tabIndex = 0;
+  scroll.setAttribute("aria-label", "周期表の位置。左右にスクロールできます");
+  const table = document.createElement("div");
+  table.className = "periodic-table answer-periodic-table";
+  table.setAttribute("role", "img");
+  table.setAttribute("aria-label", `${selectedElement.name}は周期表の${selectedElement.period}周期、${formatGroup(selectedElement)}にあります`);
+  const grid = document.createElement("div");
+  grid.className = "period-grid";
+
+  for (let period = 1; period <= 7; period += 1) {
+    const label = document.createElement("span");
+    label.className = "period-label";
+    label.style.gridColumn = "1";
+    label.style.gridRow = String(period);
+    label.textContent = period;
+    grid.append(label);
+  }
+
+  elements.forEach((element) => {
+    if (lanthanideNumbers.has(element.number) || actinideNumbers.has(element.number)) return;
+    grid.append(createPeriodicCell(element, selectedElement.number, false));
+  });
+  [
+    { period: 6, label: "La" },
+    { period: 7, label: "Ac" },
+  ].forEach(({ period, label }) => {
+    const placeholder = document.createElement("div");
+    placeholder.className = "series-placeholder";
+    placeholder.style.gridColumn = "4";
+    placeholder.style.gridRow = String(period);
+    placeholder.textContent = label;
+    grid.append(placeholder);
+  });
+  table.append(grid);
+
+  [
+    { label: "ランタノイド", numbers: lanthanideNumbers },
+    { label: "アクチノイド", numbers: actinideNumbers },
+  ].forEach(({ label, numbers }) => {
+    const series = document.createElement("div");
+    series.className = "answer-periodic-series";
+    const seriesLabel = document.createElement("span");
+    seriesLabel.className = "answer-series-label";
+    seriesLabel.textContent = label;
+    const row = document.createElement("div");
+    row.className = "series-grid";
+    row.append(document.createElement("span"));
+    elements.filter((element) => numbers.has(element.number))
+      .forEach((element, index) => {
+        const cell = createPeriodicCell(element, selectedElement.number, false);
+        cell.style.gridColumn = String(index + 4);
+        cell.style.gridRow = "1";
+        row.append(cell);
+      });
+    series.append(seriesLabel, row);
+    table.append(series);
+  });
+
+  scroll.append(table);
+  section.append(heading, scroll);
+  return section;
 }
 
 function createElementSourceLink() {
@@ -507,22 +535,26 @@ function renderPeriodicDetail(element) {
   detail.append(symbol, copy);
 }
 
-function createPeriodicCell(element, selectedNumber) {
-  const cell = document.createElement("button");
-  cell.type = "button";
+function createPeriodicCell(element, selectedNumber, interactive = true) {
+  const cell = document.createElement(interactive ? "button" : "div");
+  if (interactive) cell.type = "button";
   cell.className = `periodic-cell family-${element.family}${element.number === selectedNumber ? " is-highlighted" : ""}`;
   cell.style.gridColumn = String(element.group + 1);
   cell.style.gridRow = String(element.period);
   cell.setAttribute("aria-label", `${element.number}番 ${element.name} ${element.englishName}、${formatGroup(element)}、${element.period}周期`);
-  cell.setAttribute("aria-pressed", String(element.number === selectedNumber));
+  if (interactive) cell.setAttribute("aria-pressed", String(element.number === selectedNumber));
   cell.innerHTML = `<span class="periodic-number"></span><span class="periodic-symbol"></span><span class="periodic-name"></span>`;
   cell.querySelector(".periodic-number").textContent = element.number;
   cell.querySelector(".periodic-symbol").textContent = element.symbol;
   cell.querySelector(".periodic-name").textContent = element.name;
-  cell.addEventListener("click", () => {
-    state.highlightedElement = element.number;
-    renderPeriodicTable();
-  });
+  if (interactive) {
+    cell.addEventListener("click", () => {
+      state.highlightedElement = element.number;
+      renderPeriodicTable();
+    });
+  } else if (element.number === selectedNumber) {
+    cell.setAttribute("aria-current", "true");
+  }
   return cell;
 }
 
@@ -591,7 +623,6 @@ document.querySelectorAll(".tab-button").forEach((button) => {
 document.querySelectorAll(".level-button").forEach((button) => {
   button.addEventListener("click", () => {
     state.level = button.dataset.level;
-    state.cardIndex = 0;
     document.querySelectorAll(".level-button").forEach((levelButton) => {
       const isActive = levelButton === button;
       levelButton.classList.toggle("is-active", isActive);
@@ -599,7 +630,6 @@ document.querySelectorAll(".level-button").forEach((button) => {
     });
     if (!$("#quiz-choices")) renderQuizCard();
     startQuiz();
-    renderCard();
   });
 });
 $("#quiz-card").addEventListener("click", (event) => {
@@ -611,25 +641,6 @@ $("#quiz-card").addEventListener("click", (event) => {
   state.quizIndex += 1;
   renderQuestion();
 });
-$("#flashcard").addEventListener("click", flipCard);
-$("#previous-card").addEventListener("click", () => {
-  if (state.cardIndex > 0) state.cardIndex -= 1;
-  renderCard();
-});
-$("#next-card").addEventListener("click", () => {
-  state.cardIndex = (state.cardIndex + 1) % getLevelElements().length;
-  renderCard();
-});
-$("#toggle-learned").addEventListener("click", () => {
-  const number = getLevelElements()[state.cardIndex].number;
-  if (state.learned.has(number)) state.learned.delete(number);
-  else state.learned.add(number);
-  saveProgress();
-  updateStats();
-  renderCard();
-});
-
 updateStats();
 startQuiz();
-renderCard();
 renderPeriodicTable();
