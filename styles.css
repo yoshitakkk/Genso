@@ -944,3 +944,146 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     border-left: 0;
   }
 }
+
+.quiz-card {
+  position: relative;
+  min-height: 0;
+  border-color: #334159;
+  background: #1c2738;
+}
+
+.quiz-symbol {
+  color: #66d8d2;
+  font-weight: 800;
+  text-shadow: 0 3px 18px rgba(102, 216, 210, .18);
+}
+
+.choice-button {
+  min-height: 50px;
+  border-color: #46556e;
+  background: #2d3b50;
+  color: #f5f7fb;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.choice-button:hover:not(:disabled) {
+  border-color: #7d8df0;
+  background: #374660;
+}
+
+.choice-button.is-correct {
+  border-color: #10b981;
+  background: #059669;
+  color: #fff;
+}
+
+.choice-button.is-wrong {
+  border-color: #fb7185;
+  background: #9f354a;
+  color: #fff;
+}
+
+.quiz-answer-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.quiz-feedback {
+  min-height: 0;
+  margin: 9px 0 0;
+  padding: 5px 10px;
+  border: 1px solid #10b981;
+  border-radius: 6px;
+  background: rgba(5, 150, 105, .2);
+  color: #6ee7b7;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.quiz-feedback:empty {
+  display: none;
+}
+
+.quiz-feedback.is-wrong {
+  border-color: #fb7185;
+  background: rgba(190, 56, 78, .2);
+  color: #fda4af;
+}
+
+.next-question {
+  flex: 0 0 auto;
+  min-height: 40px;
+  margin: 0;
+  padding: 0 17px;
+  border-radius: 11px;
+  background: #5145e5;
+  box-shadow: 0 5px 14px rgba(81, 69, 229, .25);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.next-question:hover {
+  background: #635bfa;
+}
+
+.quiz-card.is-answered {
+  padding-top: 17px;
+}
+
+.quiz-card.is-answered .quiz-card-top,
+.quiz-card.is-answered .quiz-prompt,
+.quiz-card.is-answered .quiz-symbol,
+.quiz-card.is-answered .quiz-choices {
+  display: none;
+}
+
+.quiz-card.is-answered .quiz-answer-actions {
+  margin-bottom: 12px;
+}
+
+.quiz-card.is-answered .quiz-feature {
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  .quiz-card {
+    padding: 16px 14px;
+  }
+
+  .quiz-symbol {
+    margin: 2px auto 13px;
+    font-size: 60px;
+  }
+
+  .quiz-prompt {
+    margin-top: 12px;
+  }
+
+  .quiz-choices {
+    gap: 8px;
+  }
+
+  .choice-button {
+    min-height: 48px;
+    padding: 8px 11px;
+    font-size: 14px;
+  }
+
+  .quiz-card.is-answered {
+    padding: 14px;
+  }
+
+  .quiz-card.is-answered .quiz-answer-actions {
+    margin-bottom: 10px;
+  }
+
+  .next-question {
+    min-height: 38px;
+    padding: 0 13px;
+    font-size: 12px;
+  }
+}

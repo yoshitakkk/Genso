@@ -9,8 +9,8 @@
       content="元素記号クイズで元素の名前を楽しく覚えよう。"
     />
     <title>元素記号ゲーム</title>
-    <link rel="stylesheet" href="styles.css?v=20261029-1" />
-    <script src="app.js?v=20261029-1" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261029-2" />
+    <script src="app.js?v=20261029-2" defer></script>
   </head>
   <body>
     <div class="app-shell">
@@ -64,9 +64,11 @@
             <div class="quiz-prompt">この元素の名前は？</div>
             <div class="quiz-symbol" id="quiz-symbol">H</div>
             <div class="quiz-choices" id="quiz-choices" role="group" aria-label="答えを選択"></div>
-            <div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div>
+            <div class="quiz-answer-actions">
+              <div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div>
+              <button class="primary-button next-question" id="next-question" type="button" hidden>次の問題 <span aria-hidden="true">→</span></button>
+            </div>
             <div class="quiz-feature" id="quiz-feature" hidden></div>
-            <button class="primary-button next-question" id="next-question" type="button" hidden>次の問題 <span aria-hidden="true">→</span></button>
           </div>
           <p class="helper-text">10問チャレンジ。何度でも挑戦できます。</p>
         </section>

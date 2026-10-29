@@ -322,6 +322,7 @@ function startQuiz() {
 
 function renderQuestion() {
   const question = state.quizQuestions[state.quizIndex];
+  $("#quiz-card").classList.remove("is-answered");
   const progress = (state.quizIndex + 1) / state.quizQuestions.length * 100;
   $("#quiz-progress-bar").style.width = `${progress}%`;
   $("#question-counter").innerHTML = `${state.quizIndex + 1} <span>/ ${state.quizQuestions.length}</span>`;
@@ -362,14 +363,15 @@ function answerQuestion(selectedButton, question) {
   if (isCorrect) {
     state.quizScore += 1;
     state.correct += 1;
-    feedback.textContent = "正解！いい調子です。";
+    feedback.textContent = "正解！";
     saveProgress();
     updateStats();
   } else {
     selectedButton.classList.add("is-wrong");
-    feedback.textContent = `おしい！正解は「${question.name}」です。`;
+    feedback.textContent = `正解は「${question.name}」`;
     feedback.classList.add("is-wrong");
   }
+  $("#quiz-card").classList.add("is-answered");
   state.highlightedElement = question.number;
   renderPeriodicTable();
   renderAnswerDetails(question);
@@ -400,9 +402,12 @@ function renderQuizCard() {
     <div class="quiz-prompt">この元素の名前は？</div>
     <div class="quiz-symbol" id="quiz-symbol"></div>
     <div class="quiz-choices" id="quiz-choices" role="group" aria-label="答えを選択"></div>
-    <div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div>
+    <div class="quiz-answer-actions">
+      <div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div>
+      <button class="primary-button next-question" id="next-question" type="button" hidden>次の問題 <span aria-hidden="true">→</span></button>
+    </div>
     <div class="quiz-feature" id="quiz-feature" hidden></div>
-    <button class="primary-button next-question" id="next-question" type="button" hidden>次の問題 <span aria-hidden="true">→</span></button>`;
+    `;
 }
 
 function formatGroup(element) {
