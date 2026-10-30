@@ -6,11 +6,11 @@
     <meta name="theme-color" content="#111827" />
     <meta
       name="description"
-      content="元素記号クイズで元素の名前を楽しく覚えよう。"
+      content="元素記号や化学式のクイズで、元素と物質を楽しく覚えよう。"
     />
     <title>元素記号ゲーム</title>
-    <link rel="stylesheet" href="styles.css?v=20261029-2" />
-    <script src="app.js?v=20261029-2" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261030-1" />
+    <script src="app.js?v=20261030-1" defer></script>
   </head>
   <body>
     <div class="app-shell">
@@ -59,6 +59,12 @@
             <div class="question-counter" id="question-counter" aria-live="polite">1 <span>/ 10</span></div>
           </div>
           <div class="quiz-progress" aria-hidden="true"><span id="quiz-progress-bar"></span></div>
+          <div class="quiz-mode-picker" role="group" aria-label="クイズモード">
+            <button class="quiz-mode-button is-active" type="button" data-quiz-mode="symbol-to-name" aria-pressed="true">元素記号 → 元素名</button>
+            <button class="quiz-mode-button" type="button" data-quiz-mode="name-to-symbol" aria-pressed="false">元素名 → 元素記号</button>
+            <button class="quiz-mode-button" type="button" data-quiz-mode="formula-to-substance" aria-pressed="false">化学式 → 物質名</button>
+            <button class="quiz-mode-button" type="button" data-quiz-mode="substance-to-formula" aria-pressed="false">物質名 → 化学式</button>
+          </div>
           <div class="quiz-card" id="quiz-card">
             <div class="quiz-card-top"><span class="quiz-mode">元素記号から選ぼう</span><span class="atomic-number" id="quiz-atomic-number">No. 01</span></div>
             <div class="quiz-prompt">この元素の名前は？</div>

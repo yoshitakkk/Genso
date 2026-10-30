@@ -74,6 +74,10 @@ h1, h2, p { margin-top: 0; }
 .question-counter span { color: #98a39e; font-size: 11px; }
 .quiz-progress { height: 4px; margin: 0 0 18px; overflow: hidden; border-radius: 5px; background: #e7ece8; }
 .quiz-progress span { display: block; width: 10%; height: 100%; border-radius: inherit; background: #5c9b76; transition: width .25s ease; }
+.quiz-mode-picker { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.quiz-mode-button { min-height: 36px; padding: 7px 12px; border: 1px solid #dfe8e1; border-radius: 8px; background: #fff; color: #64746b; cursor: pointer; font-size: 12px; transition: border-color .15s, background .15s, color .15s; }
+.quiz-mode-button:hover { border-color: #9fc2ab; color: #28694f; }
+.quiz-mode-button.is-active { border-color: #39805f; background: #e8f1eb; color: #28694f; font-weight: 700; }
 .quiz-card { min-height: 335px; padding: 23px 26px 21px; border: 1px solid #e7ece8; border-radius: 16px; background: white; box-shadow: 0 8px 28px rgba(37, 64, 51, .035); }
 .quiz-card-top { display: flex; justify-content: space-between; align-items: center; }
 .quiz-mode { color: #6c7f74; font-size: 11px; }
@@ -148,6 +152,8 @@ h1, h2, p { margin-top: 0; }
   .quiz-card { min-height: 340px; padding: 20px 14px 17px; }
   .quiz-symbol { margin-bottom: 19px; }
   .quiz-choices { gap: 8px; }
+  .quiz-mode-picker { gap: 6px; }
+  .quiz-mode-button { flex: 1 1 calc(50% - 6px); padding: 7px 6px; font-size: 11px; }
   .choice-button { min-height: 47px; padding: 8px 10px; font-size: 12px; }
   .flashcard { min-height: 315px; }
   .footer { min-height: 53px; font-size: 8px; }
@@ -1030,6 +1036,28 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   background: #635bfa;
 }
 
+.quiz-mode-button {
+  border-color: #394760;
+  background: #202b42;
+  color: #e8edff;
+}
+
+.quiz-mode-button:hover {
+  border-color: #7774ed;
+  background: #292f50;
+  color: #f0efff;
+}
+
+.quiz-mode-button.is-active {
+  border-color: #7774ed;
+  background: #34365e;
+  color: #f0efff;
+}
+
+.quiz-card.is-formula-prompt .quiz-symbol {
+  font-size: clamp(30px, 8vw, 56px);
+}
+
 .quiz-card.is-answered {
   padding-top: 17px;
 }
@@ -1057,6 +1085,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .quiz-symbol {
     margin: 2px auto 13px;
     font-size: 60px;
+  }
+
+  .quiz-card.is-formula-prompt .quiz-symbol {
+    font-size: clamp(30px, 10vw, 48px);
   }
 
   .quiz-prompt {

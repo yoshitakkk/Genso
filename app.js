@@ -31,6 +31,74 @@ const elements = [
   [117, "Ts", "テネシン"], [118, "Og", "オガネソン"],
 ].map(([number, symbol, name]) => ({ number, symbol, name }));
 
+const substances = [
+  { formula: "H₂O", name: "水", level: "basic" },
+  { formula: "CO₂", name: "二酸化炭素", level: "basic" },
+  { formula: "O₂", name: "酸素", level: "basic" },
+  { formula: "N₂", name: "窒素", level: "basic" },
+  { formula: "NaCl", name: "塩化ナトリウム", level: "basic" },
+  { formula: "NH₃", name: "アンモニア", level: "basic" },
+  { formula: "CH₄", name: "メタン", level: "basic" },
+  { formula: "HCl", name: "塩化水素", level: "basic" },
+  { formula: "NaOH", name: "水酸化ナトリウム", level: "basic" },
+  { formula: "CaCO₃", name: "炭酸カルシウム", level: "basic" },
+  { formula: "H₂SO₄", name: "硫酸", level: "intermediate" },
+  { formula: "HNO₃", name: "硝酸", level: "intermediate" },
+  { formula: "NaHCO₃", name: "炭酸水素ナトリウム", level: "intermediate" },
+  { formula: "C₆H₁₂O₆", name: "ブドウ糖", level: "intermediate" },
+  { formula: "C₂H₅OH", name: "エタノール", level: "intermediate" },
+  { formula: "CaO", name: "酸化カルシウム", level: "intermediate" },
+  { formula: "MgO", name: "酸化マグネシウム", level: "intermediate" },
+  { formula: "CuSO₄", name: "硫酸銅", level: "intermediate" },
+  { formula: "Na₂CO₃", name: "炭酸ナトリウム", level: "intermediate" },
+  { formula: "H₂O₂", name: "過酸化水素", level: "intermediate" },
+  { formula: "KMnO₄", name: "過マンガン酸カリウム", level: "advanced" },
+  { formula: "KNO₃", name: "硝酸カリウム", level: "advanced" },
+  { formula: "Fe₂O₃", name: "酸化鉄(III)", level: "advanced" },
+  { formula: "FeCl₃", name: "塩化鉄(III)", level: "advanced" },
+  { formula: "NH₄Cl", name: "塩化アンモニウム", level: "advanced" },
+  { formula: "Na₂SO₄", name: "硫酸ナトリウム", level: "advanced" },
+  { formula: "Ca(OH)₂", name: "水酸化カルシウム", level: "advanced" },
+  { formula: "Al₂O₃", name: "酸化アルミニウム", level: "advanced" },
+  { formula: "H₃PO₄", name: "リン酸", level: "advanced" },
+  { formula: "C₁₂H₂₂O₁₁", name: "ショ糖", level: "advanced" },
+];
+
+const quizModes = {
+  "symbol-to-name": {
+    label: "元素記号 → 元素名",
+    prompt: "この元素の名前は？",
+    source: "elements",
+    question: (item) => item.symbol,
+    answer: (item) => item.name,
+    choice: (item) => item.name,
+  },
+  "name-to-symbol": {
+    label: "元素名 → 元素記号",
+    prompt: "この元素の元素記号は？",
+    source: "elements",
+    question: (item) => item.name,
+    answer: (item) => item.symbol,
+    choice: (item) => item.symbol,
+  },
+  "formula-to-substance": {
+    label: "化学式 → 物質名",
+    prompt: "この化学式が表す物質は？",
+    source: "substances",
+    question: (item) => item.formula,
+    answer: (item) => item.name,
+    choice: (item) => item.name,
+  },
+  "substance-to-formula": {
+    label: "物質名 → 化学式",
+    prompt: "この物質の化学式は？",
+    source: "substances",
+    question: (item) => item.name,
+    answer: (item) => item.formula,
+    choice: (item) => item.formula,
+  },
+};
+
 const elementFeatures = [
   "水と有機物をつくる、宇宙で最も多い元素です。",
   "とても軽く、気球や低温冷却に使われます。",
@@ -247,6 +315,7 @@ const state = {
   correct: saved.correct,
   activeView: "quiz",
   level: "basic",
+  quizMode: "symbol-to-name",
   quizQuestions: [],
   quizIndex: 0,
   quizScore: 0,
@@ -295,8 +364,13 @@ function showView(view) {
   }
 }
 
-function getLevelElements() {
-  return elements.filter((element) => element.level === state.level);
+function getQuizMode() {
+  return quizModes[state.quizMode];
+}
+
+function getQuizItems() {
+  const items = getQuizMode().source === "elements" ? elements : substances;
+  return items.filter((item) => item.level === state.level);
 }
 
 function getLevelName() {
@@ -313,7 +387,7 @@ function shuffle(items) {
 }
 
 function startQuiz() {
-  state.quizQuestions = shuffle(getLevelElements()).slice(0, 10);
+  state.quizQuestions = shuffle(getQuizItems()).slice(0, 10);
   state.quizIndex = 0;
   state.quizScore = 0;
   state.answered = false;
@@ -322,13 +396,19 @@ function startQuiz() {
 
 function renderQuestion() {
   const question = state.quizQuestions[state.quizIndex];
+  const mode = getQuizMode();
+  const isElementQuestion = mode.source === "elements";
   $("#quiz-card").classList.remove("is-answered");
+  $("#quiz-card").classList.toggle("is-formula-prompt", state.quizMode === "formula-to-substance");
   const progress = (state.quizIndex + 1) / state.quizQuestions.length * 100;
   $("#quiz-progress-bar").style.width = `${progress}%`;
   $("#question-counter").innerHTML = `${state.quizIndex + 1} <span>/ ${state.quizQuestions.length}</span>`;
-  $("#quiz-atomic-number").textContent = `No. ${String(question.number).padStart(2, "0")}`;
-  $(".quiz-mode").textContent = `${getLevelName()} · 元素記号から選ぼう`;
-  $("#quiz-symbol").textContent = question.symbol;
+  $("#quiz-atomic-number").textContent = isElementQuestion
+    ? `No. ${String(question.number).padStart(2, "0")}`
+    : `物質 ${String(state.quizIndex + 1).padStart(2, "0")}`;
+  $(".quiz-mode").textContent = `${getLevelName()} · ${mode.label}`;
+  $(".quiz-prompt").textContent = mode.prompt;
+  $("#quiz-symbol").textContent = mode.question(question);
   $("#quiz-feedback").textContent = "";
   $("#quiz-feedback").classList.remove("is-wrong");
   $("#quiz-feature").hidden = true;
@@ -337,13 +417,13 @@ function renderQuestion() {
   const quizChoices = $("#quiz-choices");
   quizChoices.replaceChildren();
 
-  const distractors = shuffle(getLevelElements().filter((element) => element.number !== question.number)).slice(0, 3);
-  shuffle([...distractors, question]).forEach((element) => {
+  const distractors = shuffle(getQuizItems().filter((item) => item !== question)).slice(0, 3);
+  shuffle([...distractors, question]).forEach((item) => {
     const button = document.createElement("button");
     button.className = "choice-button";
     button.type = "button";
-    button.textContent = element.name;
-    button.dataset.number = element.number;
+    button.textContent = mode.choice(item);
+    button.dataset.answer = mode.answer(item);
     button.addEventListener("click", () => answerQuestion(button, question));
     quizChoices.append(button);
   });
@@ -353,11 +433,12 @@ function renderQuestion() {
 function answerQuestion(selectedButton, question) {
   if (state.answered) return;
   state.answered = true;
-  const isCorrect = Number(selectedButton.dataset.number) === question.number;
+  const mode = getQuizMode();
+  const isCorrect = selectedButton.dataset.answer === mode.answer(question);
   const quizChoices = $("#quiz-choices");
   quizChoices.querySelectorAll("button").forEach((button) => {
     button.disabled = true;
-    if (Number(button.dataset.number) === question.number) button.classList.add("is-correct");
+    if (button.dataset.answer === mode.answer(question)) button.classList.add("is-correct");
   });
   const feedback = $("#quiz-feedback");
   if (isCorrect) {
@@ -368,12 +449,14 @@ function answerQuestion(selectedButton, question) {
     updateStats();
   } else {
     selectedButton.classList.add("is-wrong");
-    feedback.textContent = `正解は「${question.name}」`;
+    feedback.textContent = `正解は「${mode.answer(question)}」`;
     feedback.classList.add("is-wrong");
   }
   $("#quiz-card").classList.add("is-answered");
-  state.highlightedElement = question.number;
-  renderPeriodicTable();
+  if (mode.source === "elements") {
+    state.highlightedElement = question.number;
+    renderPeriodicTable();
+  }
   renderAnswerDetails(question);
   $("#next-question").textContent = state.quizIndex === state.quizQuestions.length - 1 ? "結果を見る →" : "次の問題 →";
   $("#next-question").hidden = false;
@@ -384,7 +467,7 @@ function showQuizResult() {
   $("#question-counter").innerHTML = `10 <span>/ 10</span>`;
   $("#quiz-card").innerHTML = `
     <div class="quiz-result">
-      <p class="eyebrow">CHALLENGE COMPLETE</p>
+      <p class="eyebrow">CHALLENGE COMPLETE · ${getQuizMode().label}</p>
       <h3>10問チャレンジ終了！</h3>
       <div class="quiz-result-score">${state.quizScore}<span class="stat-unit"> / 10 問正解</span></div>
       <p>${state.quizScore === 10 ? "全問正解！すばらしい！" : "挑戦するたび、少しずつ覚えていこう。"}</p>
@@ -399,7 +482,7 @@ function showQuizResult() {
 function renderQuizCard() {
   $("#quiz-card").innerHTML = `
     <div class="quiz-card-top"><span class="quiz-mode">元素記号から選ぼう</span><span class="atomic-number" id="quiz-atomic-number"></span></div>
-    <div class="quiz-prompt">この元素の名前は？</div>
+    <div class="quiz-prompt"></div>
     <div class="quiz-symbol" id="quiz-symbol"></div>
     <div class="quiz-choices" id="quiz-choices" role="group" aria-label="答えを選択"></div>
     <div class="quiz-answer-actions">
@@ -419,6 +502,17 @@ function formatGroup(element) {
 function renderAnswerDetails(element) {
   const details = $("#quiz-feature");
   details.replaceChildren();
+  if (getQuizMode().source === "substances") {
+    const heading = document.createElement("p");
+    heading.className = "feature-heading";
+    heading.textContent = `${element.name} · ${element.formula}`;
+    const description = document.createElement("p");
+    description.className = "feature-description";
+    description.textContent = "化学式の元素記号と数字に注目して覚えましょう。";
+    details.append(heading, description);
+    details.hidden = false;
+    return;
+  }
   const heading = document.createElement("p");
   heading.className = "feature-heading";
   heading.textContent = `${element.name} / ${element.englishName}`;
@@ -634,6 +728,18 @@ document.querySelectorAll(".level-button").forEach((button) => {
       levelButton.setAttribute("aria-pressed", String(isActive));
     });
     if (!$("#quiz-choices")) renderQuizCard();
+    startQuiz();
+  });
+});
+document.querySelectorAll(".quiz-mode-button").forEach((button) => {
+  button.addEventListener("click", () => {
+    state.quizMode = button.dataset.quizMode;
+    document.querySelectorAll(".quiz-mode-button").forEach((modeButton) => {
+      const isActive = modeButton === button;
+      modeButton.classList.toggle("is-active", isActive);
+      modeButton.setAttribute("aria-pressed", String(isActive));
+    });
+    renderQuizCard();
     startQuiz();
   });
 });
